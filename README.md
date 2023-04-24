@@ -143,7 +143,6 @@ Dentro do loop, o método `writerow` é usado para escrever uma linha no arquivo
 
 O código solicita ao usuário o nome do produto que deseja pesquisar, o número de páginas que deseja percorrer, o valor mínimo e o valor máximo do produto:
 
-graphqlCopy code
 
 `produto = input("Digite o produto que você deseja pesquisar: ")`
 `num_pag`
