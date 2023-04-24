@@ -1,4 +1,4 @@
-# Como pesquisar produtos no Mercado Livre e exportar os resultados para um arquivo CSV
+# Tutorial em Markdown: Como pesquisar produtos no Mercado Livre e exportar os resultados para um arquivo CSV
 
 Este tutorial tem como objetivo explicar o código Python apresentado acima, que faz a pesquisa de produtos no site do Mercado Livre e exporta os resultados para um arquivo CSV.
 
@@ -24,9 +24,9 @@ A primeira parte do código importa as bibliotecas necessárias:
 
 javascriptCopy code
 
-`import requests
-from bs4 import BeautifulSoup
-import csv` 
+`import requests`
+`from bs4 import BeautifulSoup`
+`import csv` 
 
 A biblioteca `requests` é usada para fazer requisições HTTP, `BeautifulSoup` é usada para manipular o HTML da página do Mercado Livre e `csv` é usada para ler e escrever arquivos CSV.
 
@@ -34,19 +34,13 @@ A biblioteca `requests` é usada para fazer requisições HTTP, `BeautifulSoup` 
 
 A função `pesquisar_produtos_mercado_livre` é definida com os seguintes parâmetros: `produto`, `num_paginas`, `preco_min` e `preco_max`. Essa função realiza a pesquisa de produtos no site do Mercado Livre.
 
-pythonCopy code
-
 `def pesquisar_produtos_mercado_livre(produto, num_paginas, preco_min, preco_max):` 
 
 A variável `url_base` é definida para armazenar a URL base da página de pesquisa de produtos do Mercado Livre:
 
-makefileCopy code
-
 `url_base = "https://lista.mercadolivre.com.br/{}"` 
 
 A variável `produtos` é criada como uma lista vazia para armazenar os resultados da pesquisa:
-
-cssCopy code
 
 `produtos = []` 
 
@@ -58,15 +52,11 @@ scssCopy code
 
 Dentro do loop, a variável `url` é formatada para incluir o nome do produto e a posição inicial da página:
 
-pythonCopy code
-
 `url = url_base.format(produto) + f"_Desde_{i*50+1}"` 
 
 O número 50 é o número máximo de produtos exibidos por página no Mercado Livre. A posição inicial da página é calculada multiplicando o número da página pelo número máximo de produtos exibidos e somando 1.
 
 A função `requests.get` é usada para fazer uma requisição GET para a URL e armazenar a resposta na variável `resposta`:
-
-vbnetCopy code
 
 `resposta = requests.get(url, verify=False)` 
 
@@ -74,20 +64,14 @@ O parâmetro `verify=False` é usado para ignorar a verificação do certificado
 
 A função `BeautifulSoup` é usada para criar um objeto `soup` a partir do texto da resposta HTML:
 
-arduinoCopy code
-
 `soup = BeautifulSoup(resposta.text, "html.parser")` 
 
 A função `find_all` é usada para encontrar todos os elementos `li` com a classe `ui-search-layout__item` e armazenar na variável `itens`:
-
-makefileCopy code
 
 `itens = soup.find_all("li", class_="ui-search-layout__item")` 
 
 Dentro do loop `for`, a variável `titulo` é usada para extrair o título do produto e remover espaços em br
 Continuação...
-
-cssCopy code
 
 `for item in itens:
     titulo = item.find("h2", class_="ui-search-item__title").text.strip()` 
@@ -96,43 +80,32 @@ A função `strip` é usada para remover os espaços em branco do começo e do f
 
 A variável `link` é usada para extrair o link do produto:
 
-bashCopy code
-
 `link = item.find("a", class_="ui-search-link")["href"]` 
 
 As variáveis `preco_original` e `preco_desconto` são usadas para extrair o preço original e o preço com desconto do produto, respectivamente:
 
-scssCopy code
-
-`preco_tags = item.find_all("span", class_="price-tag-fraction")
-preco_original = preco_tags[0].text.strip()
-if len(preco_tags) > 1:
-    preco_desconto = preco_tags[1].text.strip()
-else:
-    preco_desconto = preco_original` 
+`preco_tags = item.find_all("span", class_="price-tag-fraction")`
+`preco_original = preco_tags[0].text.strip()`
+`if len(preco_tags) > 1:`
+`    preco_desconto = preco_tags[1].text.strip()`
+`else:`
+`    preco_desconto = preco_original` 
 
 A função `float` é usada para converter os preços para um número float:
 
-lessCopy code
 
-`preco_original_float = float(preco_original.replace(".", "").replace(",", "."))
-preco_desconto_float = float(preco_desconto.replace(".", "").replace(",", "."))` 
+`preco_original_float = float(preco_original.replace(".", "").replace(",", "."))`
+`preco_desconto_float = float(preco_desconto.replace(".", "").replace(",", "."))` 
 
 A condição `if` é usada para verificar se o preço com desconto está dentro do intervalo especificado pelo usuário:
-
-yamlCopy code
 
 `if preco_min <= preco_desconto_float <= preco_max:` 
 
 Se o preço com desconto estiver dentro do intervalo especificado, o produto é adicionado à lista de produtos:
 
-bashCopy code
-
 `produtos.append({"titulo": titulo, "preco_original": preco_original, "preco_desconto": preco_desconto, "link": link})` 
 
 A função `pesquisar_produtos_mercado_livre` retorna a lista de produtos encontrados:
-
-kotlinCopy code
 
 `return produtos` 
 
@@ -140,43 +113,29 @@ kotlinCopy code
 
 A função `exportar_para_csv` é definida com os parâmetros `produtos` e `nome_arquivo`. Essa função exporta os resultados da pesquisa para um arquivo CSV.
 
-pythonCopy code
-
 `def exportar_para_csv(produtos, nome_arquivo):` 
 
 A função `open` é usada para abrir (ou criar) o arquivo CSV no modo de escrita, com codificação UTF-8:
-
-pythonCopy code
 
 `with open(nome_arquivo, mode='w', newline='', encoding='utf-8') as arquivo_csv:` 
 
 A variável `campos` é definida para armazenar os nomes dos campos que serão incluídos no arquivo CSV:
 
-cssCopy code
-
 `campos = ["titulo", "preco_original", "preco_desconto", "link"]` 
 
 O objeto `DictWriter` é criado para escrever dicionários no arquivo CSV:
-
-makefileCopy code
 
 `escritor = csv.DictWriter(arquivo_csv, fieldnames=campos)` 
 
 O método `writeheader` é usado para escrever o cabeçalho no arquivo CSV com os nomes dos campos:
 
-scssCopy code
-
 `escritor.writeheader()` 
 
 O loop `for` é usado para percorrer cada produto na lista de produtos:
 
-rustCopy code
-
 `for produto in produtos:` 
 
 Dentro do loop, o método `writerow` é usado para escrever uma linha no arquivo CSV com os dados do produto:
-
-scssCopy code
 
 `escritor.writerow(produto)` 
 
@@ -186,39 +145,27 @@ O código solicita ao usuário o nome do produto que deseja pesquisar, o número
 
 graphqlCopy code
 
-`produto = input("Digite o produto que você deseja pesquisar: ")
-num_pag`
-Continuação...
-
-pythonCopy code
-
-`num_paginas = int(input("Digite o número de páginas que deseja percorrer: "))
-preco_min = float(input("Digite o valor mínimo do produto: ").replace(",", "."))
-preco_max = float(input("Digite o valor máximo do produto: ").replace(",", "."))` 
+`produto = input("Digite o produto que você deseja pesquisar: ")`
+`num_pag`
+`num_paginas = int(input("Digite o número de páginas que deseja percorrer: "))`
+`preco_min = float(input("Digite o valor mínimo do produto: ").replace(",", "."))`
+`preco_max = float(input("Digite o valor máximo do produto: ").replace(",", "."))` 
 
 Os valores de `preco_min` e `preco_max` são convertidos para `float` e a vírgula é substituída por ponto.
 
 A função `pesquisar_produtos_mercado_livre` é chamada e os resultados são armazenados na variável `resultados`:
 
-scssCopy code
-
 `resultados = pesquisar_produtos_mercado_livre(produto, num_paginas, preco_min, preco_max)` 
 
 O nome do arquivo CSV que será criado é definido:
-
-makefileCopy code
 
 `nome_arquivo = "resultados.csv"` 
 
 A função `exportar_para_csv` é chamada para escrever os resultados no arquivo CSV:
 
-scssCopy code
-
 `exportar_para_csv(resultados, nome_arquivo)` 
 
 Uma mensagem é exibida informando que os resultados foram exportados para o arquivo CSV:
-
-pythonCopy code
 
 `print(f"Os resultados foram exportados para o arquivo '{nome_arquivo}'.")` 
 
