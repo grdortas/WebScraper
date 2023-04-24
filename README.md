@@ -1,4 +1,4 @@
-# Tutorial em Markdown: Como pesquisar produtos no Mercado Livre e exportar os resultados para um arquivo CSV
+# Como pesquisar produtos no Mercado Livre e exportar os resultados para um arquivo CSV
 
 Este tutorial tem como objetivo explicar o código Python apresentado acima, que faz a pesquisa de produtos no site do Mercado Livre e exporta os resultados para um arquivo CSV.
 
